@@ -1,0 +1,11 @@
+etc/
+incident/
+Include/
+kabu_data/
+keras_model/
+Lib/
+log/
+Scripts/
+share/
+pyvenv.cfg
+setting.ini
