@@ -1,4 +1,5 @@
 # 1. 標準ライブラリ
+import datetime
 import glob
 import os
 import re
@@ -70,3 +71,20 @@ def csv_to_db(config, logger):
         # SQL実行
         psycopg2_ext.execute_sql(logger, config, sql, 'bulk_insert'
                              , insert_data.to_numpy().tolist())
+
+    # 取り込み完了ファイルを退避
+    if len(csv_name_list) > 0:
+
+        # フォルダ名用の日時文字列を作成
+        t_delta = datetime.timedelta(hours=9)
+        JST     = datetime.timezone(t_delta, 'JST')
+        now     = datetime.datetime.now(JST)\
+                          .strftime('%Y-%m-%d_%H%M%S')
+
+        # フォルダ作成
+        os.mkdir(os.path.join(current_dir,now))
+
+        # 取り込み完了したファイルを保管用フォルダに移動
+        for f in os.listdir(current_dir):
+            if os.path.isfile(os.path.join(current_dir,f)):
+                os.replace(os.path.join(current_dir,f),os.path.join(current_dir,now,f))
